@@ -1,20 +1,22 @@
 import { getUserList } from "@/apis/users";
 import Link from "next/link";
+import { SearchInput } from "./search-input";
+import { loadUserSearchParams } from "./search-params";
 
 type ServerProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function Home({ searchParams }: ServerProps) {
-  const sp = await searchParams;
+  const { name, page } = await loadUserSearchParams(searchParams);
 
-  const page = typeof sp.page === "string" ? Math.max(+sp.page, 1) : 1;
-
-  const users = await getUserList({ _page: page });
+  const users = await getUserList({ _page: page, name });
 
   return (
     <main className="m-5 p-5">
       <h1>Users</h1>
+
+      <SearchInput />
 
       <div className="overflow-y-auto h-[calc(100vh-40px)]">
         <table className="table-auto w-full">
