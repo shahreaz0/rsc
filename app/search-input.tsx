@@ -1,12 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import React from "react";
 import { useUserSearchParams } from "./search-params";
 
 export function SearchInput() {
-  const { setUserSearchParams, isLoading } = useUserSearchParams();
+  const { setUserSearchParams, isLoading, userSearchParams } = useUserSearchParams();
 
-  const router = useRouter();
+  const [timeoutId, setTimeoutId] = React.useState<NodeJS.Timeout | null>(null);
+
+  const isSearchLoading = isLoading || timeoutId !== null;
 
   return (
     <div className="my-4">
@@ -14,18 +16,26 @@ export function SearchInput() {
         type="search"
         className="border border-gray-300 rounded-md p-2 w-full"
         placeholder="Search..."
+        defaultValue={userSearchParams.name}
         onChange={(event) => {
-          //   router.push(`/?name=${event.target.value}`);
-          setUserSearchParams((prev) => ({
-            ...prev,
-            name: event.target.value,
-          }));
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
 
-          router.refresh();
+          const id = setTimeout(() => {
+            setUserSearchParams((prev) => ({
+              ...prev,
+              name: event.target.value,
+            }));
+
+            setTimeoutId(null);
+          }, 500);
+
+          setTimeoutId(id);
         }}
       />
 
-      {isLoading && <div>Loading...</div>}
+      {isSearchLoading && <div>Loading...</div>}
     </div>
   );
 }
