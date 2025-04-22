@@ -1,7 +1,7 @@
 export type UserResponse = {
   first: number;
-  prev: null;
-  next: number;
+  prev: number | null;
+  next: number | null;
   last: number;
   pages: number;
   items: number;
@@ -16,10 +16,10 @@ export type User = {
   createdAt: Date;
 };
 
-export async function getUserList({ _page = 1, _per_page = 10, name = "" } = {}) {
+export async function getUserList({ page = 1, per_page = 10, name = "" } = {}) {
   const params = new URLSearchParams({
-    _page: _page.toString(),
-    _per_page: _per_page.toString(),
+    _page: page.toString(),
+    _per_page: per_page.toString(),
     name,
   }).toString();
 
