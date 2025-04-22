@@ -49,17 +49,8 @@ export default async function Home({ searchParams }: ServerProps) {
         </table>
 
         <div className="space-x-2">
-          <PreviousButton
-            users={users}
-            page={page}
-            currentSearchParams={currentSearchParams}
-          />
-
-          <NextButton
-            users={users}
-            page={page}
-            currentSearchParams={currentSearchParams}
-          />
+          <PreviousButton users={users} currentSearchParams={currentSearchParams} />
+          <NextButton users={users} currentSearchParams={currentSearchParams} />
         </div>
       </div>
     </main>
@@ -72,14 +63,11 @@ export function NextButton({
 }: {
   currentSearchParams: URLSearchParams;
   users: UserResponse;
-  page: number;
 }) {
   const newSearchParams = new URLSearchParams(currentSearchParams);
 
   if (users.next) {
     newSearchParams.set("page", users.next.toString());
-  } else {
-    newSearchParams.delete("page");
   }
 
   return (
@@ -101,14 +89,11 @@ export function PreviousButton({
 }: {
   currentSearchParams: URLSearchParams;
   users: UserResponse;
-  page: number;
 }) {
   const newSearchParams = new URLSearchParams(currentSearchParams);
 
   if (users.prev) {
     newSearchParams.set("page", users.prev.toString());
-  } else {
-    newSearchParams.delete("page");
   }
 
   return (
