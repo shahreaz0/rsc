@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUserSearchParams } from "./search-params";
 
 export function SearchInput() {
-  const { setUserSearchParams } = useUserSearchParams();
+  const { setUserSearchParams, isLoading } = useUserSearchParams();
 
   const router = useRouter();
 
@@ -24,6 +24,8 @@ export function SearchInput() {
           router.refresh();
         }}
       />
+
+      {isLoading && <div>Loading...</div>}
     </div>
   );
 }
